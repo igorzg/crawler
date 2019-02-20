@@ -16,6 +16,7 @@ docker-compose up -d
 sbt run -jvm-debug 5005 -J-Xmx4G
 ```
 * Prod mode:
+
 You should change prod.conf and set logging to ERROR mode if you running production mode.
 ```
 docker-compose up -d
