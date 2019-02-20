@@ -115,3 +115,5 @@ If concurrency is 5 and throttle 1000, sphere will crawl 5 pages exactly each se
 You can find statistics and info in elastic search.
 [/crawler/_search](http://localhost:9200/crawler/_search?pretty)
 
+You can find all crawled pages in folder data/storage/.
+
