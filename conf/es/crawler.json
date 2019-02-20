@@ -1,0 +1,58 @@
+{
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "uid": {
+          "type": "keyword"
+        },
+        "created": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss||strict_date_time||epoch_millis"
+        },
+        "url": {
+          "type": "text"
+        },
+        "host": {
+          "type": "keyword"
+        },
+        "fileName": {
+          "type": "keyword"
+        },
+        "links": {
+          "type": "text",
+          "index": false
+        },
+        "keywords": {
+          "type": "keyword"
+        },
+        "status": {
+          "type": "short"
+        },
+        "duration": {
+          "type": "long"
+        },
+        "size": {
+          "type": "integer"
+        },
+        "isHttps": {
+          "type": "boolean"
+        },
+        "contentType": {
+          "type": "text"
+        },
+        "description": {
+          "type": "text"
+        },
+        "title": {
+          "type": "text"
+        },
+        "index": {
+          "type": "boolean"
+        },
+        "follow": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}
