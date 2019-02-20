@@ -14,6 +14,7 @@ docker-compose up -d
 sbt run -jvm-debug 5005 -J-Xmx4G
 ```
 * Prod mode:
+You should change prod.conf and set logging to ERROR mode if you running production mode.
 ```
 docker-compose up -d
 sbt runProd -J-Xmx4G
@@ -95,4 +96,19 @@ Multiple jobs:
 | withIndexThrottle     | Boolean | see index throttle formula |
 | withStripOtherQueries | Boolean | in combination with include |
 
+### Throttle formula
+* withIndexThrottle - true - default false:
+Current pending size * throttle = time of delay
+If concurrency is 5 and throttle 1000, sphere will crawl 5 pages at least each second, delay is prolonged based on 
+current pending queue, so if current pending queue is 100 sphere will crawl 5 pages each 100 seconds so if page have 
+a lot of links and if withIndexThrottle is enabled throttle should not be number bigger than 10.
+
+* withIndexThrottle - false is default behavior:
+throttle = time of delay
+If concurrency is 5 and throttle 1000, sphere will crawl 5 pages exactly each second.
+
+
+### After you crawl page
+You can find statistics and info in elastic search.
+[/crawler/_search](http://localhost:9200/crawler/_search?pretty)
 
