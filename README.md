@@ -1,4 +1,7 @@
 # Web scraping
+
+![Crawler log](log.png)
+
 [Before using this software read article: Is web scraping perfectly legal ?](https://benbernardblog.com/web-scraping-and-crawling-are-perfectly-legal-right)
 
 # Licence: [MIT](LICENSE)
