@@ -16,14 +16,14 @@
 * Debugging mode:
 ```
 docker-compose up -d
-sbt run -jvm-debug 5005 -J-Xmx4G
+sbt run -jvm-debug 5005 -J-Xmx4G -Dconfig.resource=application.dev.conf
 ```
 * Prod mode:
 
 You should change prod.conf and set logging to ERROR mode if you running production mode.
 ```
 docker-compose up -d
-sbt runProd -J-Xmx4G
+sbt runProd -J-Xmx4G -Dconfig.resource=application.dev.conf
 ```
 
 * Docker:
