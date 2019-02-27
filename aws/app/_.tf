@@ -13,6 +13,9 @@ variable "es-domain" {
 variable "ecr-tag" {
   type = "string"
 }
+variable "ecr-github" {
+  type = "string"
+}
 variable "es-isntance-type" {
   type = "string"
 }

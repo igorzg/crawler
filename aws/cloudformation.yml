@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  EcrRepository:
+    Type: String
+
+  EcrTag:
+    Type: String
+
+  GithubLocation:
+    Type: String
+
+  MainVpcId:
+    Type: String
+
+  MainSubnets:
+    Type: String
+
+  MainSecurityGroupIds:
+    Type: String
+
+  StackName:
+    Type: String
+    Default: 'main-stack'
+
+Resources:
+  MainBuild:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Ref StackName
+      ServiceRole: !Ref MainBuildRole
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/docker:18.09.0
+        EnvironmentVariables:
+          - Name: ECR_REPOSITORY
+            Value: !Ref EcrRepository
+          - Name: ECR_TAG
+            Value: !Ref EcrTag
+      Source:
+        Type: GITHUB
+        Location: !Ref GithubLocation
+      TimeoutInMinutes: 10
+      VpcConfig:
+        VpcId: !Ref MainVpcId
+        Subnets: !Split [',', !Ref MainSubnets]
+        SecurityGroupIds: !Split [',', !Ref MainSecurityGroupIds]
+
+  MainBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: ['sts:AssumeRole']
+            Effect: Allow
+            Principal:
+              Service: [
+              'lambda.amazonaws.com',
+              'codebuild.amazonaws.com',
+              !Join ['.', ['logs', !Ref 'AWS::Region', 'amazonaws.com']]
+              ]
+        Version: '2012-10-17'
+      Path: /
+      Policies:
+        - PolicyName: MainBuildAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - 'ec2:CreateNetworkInterface'
+                  - 'ec2:DescribeNetworkInterfaces'
+                  - 'ec2:DeleteNetworkInterface'
+                  - 'ec2:DescribeSubnets'
+                  - 'ec2:DescribeSecurityGroups'
+                  - 'ec2:DescribeDhcpOptions'
+                  - 'ec2:DescribeVpcs'
+                  - 'ec2:CreateNetworkInterfacePermission'
+                Effect: Allow
+                Resource: '*'
+              - Action:
+                  - 'logs:*'
+                Effect: Allow
+                Resource: !Join ['', [!Join [':', ['arn:aws:logs::', 'log-group:/aws/codebuild/']], !Ref StackName]]
