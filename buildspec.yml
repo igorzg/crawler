@@ -8,6 +8,11 @@ phases:
       - add-apt-repository ppa:openjdk-r/ppa
       - apt-get update
       - apt-get install openjdk-11-jre -y
+      - apt-get remove scala-library scala
+      - wget http://scala-lang.org/files/archive/scala-2.12.8.deb
+      - dpkg -i scala-2.12.8.deb
+      - apt-get update
+      - apt-get install scala -y
       - apt-get install sbt -y
 
   build:
