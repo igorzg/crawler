@@ -144,7 +144,11 @@ class JobActor(dataStoreActor: ActorRef,
         val params = URLEncodedUtils.parse(url.getQuery, StandardCharsets.UTF_8).asScala
         val pUrl = new URL(new URL(task.url), pattern.get)
         val keys = URLEncodedUtils.parse(pUrl.getQuery, StandardCharsets.UTF_8).asScala.map(i => i.getName)
-        val paramsMap = params.filter(i => keys.contains(i.getName)).map(i => i.getName + "=" + URLEncoder.encode(i.getValue, StandardCharsets.UTF_8))
+        val paramsMap = params
+          .filter(i => keys.contains(i.getName))
+          .map(i =>
+            i.getName + "=" + URLEncoder.encode(i.getValue, StandardCharsets.UTF_8)
+          )
         if (keys.size.equals(paramsMap.size)) {
           task.copy(
             url = Uri(task.url).withRawQueryString(paramsMap.mkString("&")).toString()
