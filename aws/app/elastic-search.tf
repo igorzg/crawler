@@ -20,10 +20,9 @@ resource "aws_elasticsearch_domain" "main" {
   }
 
   vpc_options {
+
     subnet_ids = [
-      "${aws_subnet.main-private-az-1a.id}",
-      "${aws_subnet.main-private-az-1b.id}",
-      "${aws_subnet.main-private-az-1c.id}"
+      "${aws_subnet.main-private-az-1a.id}"
     ]
 
     security_group_ids = ["${aws_security_group.main.id}"]
