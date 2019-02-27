@@ -56,3 +56,14 @@ resource "aws_docdb_cluster_instance" "main_instances" {
   instance_class     = "${var.doc-instance-type}"
   depends_on = ["aws_docdb_cluster.main"]
 }
+
+
+
+resource "aws_route53_record" "doc-main" {
+  zone_id = "${aws_route53_zone.main.zone_id}"
+  name    = "doc"
+  type    = "CNAME"
+  ttl     = "5"
+  records = ["${aws_docdb_cluster.main.endpoint}"]
+  depends_on = ["aws_docdb_cluster.main"]
+}

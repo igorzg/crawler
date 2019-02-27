@@ -60,3 +60,14 @@ CONFIG
     "aws_iam_service_linked_role.main",
   ]
 }
+
+
+resource "aws_route53_record" "es-main" {
+  zone_id = "${aws_route53_zone.main.zone_id}"
+  name    = "es"
+  type    = "CNAME"
+  ttl     = "5"
+  records = ["${aws_elasticsearch_domain.main.endpoint}"]
+
+  depends_on = ["aws_elasticsearch_domain.main"]
+}
