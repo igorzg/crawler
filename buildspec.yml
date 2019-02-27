@@ -8,7 +8,7 @@ phases:
       - add-apt-repository ppa:openjdk-r/ppa -y
       - apt-get update
       - apt-get install openjdk-8-jdk java-common ca-certificates-java -y
-      - update-alternatives --config java -y
+      - update-alternatives -f
       - apt-get install sbt -y
 
   build:
