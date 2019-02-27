@@ -14,6 +14,11 @@ resource "aws_elasticsearch_domain" "main" {
     instance_type = "${var.es-isntance-type}"
   }
 
+  ebs_options{
+      ebs_enabled = true
+      volume_size = 10
+  }
+
   vpc_options {
     subnet_ids = [
       "${aws_subnet.main-private-az-1a.id}",

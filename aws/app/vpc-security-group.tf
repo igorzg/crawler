@@ -21,7 +21,7 @@ resource "aws_security_group" "main" {
   ingress {
     from_port   = 27017
     to_port     = 27017
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = [
       "${aws_subnet.main-private-az-1a.cidr_block}",
       "${aws_subnet.main-private-az-1b.cidr_block}",

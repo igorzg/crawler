@@ -6,14 +6,35 @@ resource "aws_vpc_endpoint" "execute-api" {
   vpc_endpoint_type = "Interface"
   vpc_id       = "${aws_vpc.main.id}"
   service_name = "${data.aws_vpc_endpoint_service.execute-api.service_name}"
+  security_group_ids = ["${aws_security_group.main.id}"]
 }
 
-resource "aws_vpc_endpoint_route_table_association" "private_execute-api" {
+resource "aws_vpc_endpoint_subnet_association" "execute-api-private-az-1a" {
   vpc_endpoint_id = "${aws_vpc_endpoint.execute-api.id}"
-  route_table_id  = "${aws_route_table.private.id}"
+  subnet_id       = "${aws_subnet.main-private-az-1a.id}"
 }
 
-resource "aws_vpc_endpoint_route_table_association" "public_execute-api" {
+resource "aws_vpc_endpoint_subnet_association" "execute-api-private-az-1b" {
   vpc_endpoint_id = "${aws_vpc_endpoint.execute-api.id}"
-  route_table_id  = "${aws_route_table.public.id}"
+  subnet_id       = "${aws_subnet.main-private-az-1b.id}"
+}
+
+resource "aws_vpc_endpoint_subnet_association" "execute-api-private-az-1c" {
+  vpc_endpoint_id = "${aws_vpc_endpoint.execute-api.id}"
+  subnet_id       = "${aws_subnet.main-private-az-1c.id}"
+}
+
+resource "aws_vpc_endpoint_subnet_association" "execute-api-public-az-1a" {
+  vpc_endpoint_id = "${aws_vpc_endpoint.execute-api.id}"
+  subnet_id       = "${aws_subnet.main-public-az-1a.id}"
+}
+
+resource "aws_vpc_endpoint_subnet_association" "execute-api-public-az-1b" {
+  vpc_endpoint_id = "${aws_vpc_endpoint.execute-api.id}"
+  subnet_id       = "${aws_subnet.main-public-az-1b.id}"
+}
+
+resource "aws_vpc_endpoint_subnet_association" "execute-api-public-az-1c" {
+  vpc_endpoint_id = "${aws_vpc_endpoint.execute-api.id}"
+  subnet_id       = "${aws_subnet.main-public-az-1c.id}"
 }
