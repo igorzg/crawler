@@ -5,14 +5,8 @@ phases:
     commands:
       - echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
       - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
-      - add-apt-repository ppa:openjdk-r/ppa
       - apt-get update
-      - apt-get install openjdk-11-jre -y
-      - apt-get remove scala-library scala
-      - wget http://scala-lang.org/files/archive/scala-2.12.8.deb
-      - dpkg -i scala-2.12.8.deb
-      - apt-get update
-      - apt-get install scala -y
+      - apt-get install openjdk-8-jre icedtea-8-plugin
       - apt-get install sbt -y
 
   build:
