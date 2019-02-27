@@ -10,6 +10,9 @@ variable "region" {
 variable "es-domain" {
   type = "string"
 }
+variable "ecr-tag" {
+  type = "string"
+}
 variable "es-isntance-type" {
   type = "string"
 }
