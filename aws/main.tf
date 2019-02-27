@@ -2,9 +2,16 @@ provider "aws" {
   region = "${var.region}"
 }
 
-module "network" {
-  source = "./network"
+module "app" {
+  source = "./app"
   name = "Main"
+  private_zone = "zone.io"
+  region = "${var.region}"
+  es-domain = "crawler"
+  es-isntance-type = "m4.large.elasticsearch"
+  doc-cluster = "crawler"
+  doc-instance-type = "db.r4.large"
+  doc-instance-count = 1
   cidr_block = "10.20.0.0/23"
   public_subnets = [
     "10.20.0.0/24",
@@ -27,8 +34,8 @@ module "network" {
     "2001:db8:1234:1a05::/64"
   ]
   azs = [
-    "eu-central-1a",
-    "eu-central-1b",
-    "eu-central-1c"
+    "eu-west-1a",
+    "eu-west-1b",
+    "eu-west-1c"
   ]
 }
