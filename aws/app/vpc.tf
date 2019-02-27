@@ -1,5 +1,5 @@
 resource "aws_vpc" "main" {
-  cidr_block       = "${var.cidr_block}"
+  cidr_block = "${var.cidr_block}"
   assign_generated_ipv6_cidr_block = true
   enable_dns_support = true
   enable_dns_hostnames = true
@@ -15,5 +15,6 @@ resource "aws_vpn_gateway" "main" {
   tags = {
     Name = "${var.name}"
   }
-  depends_on = ["aws_vpc.main"]
+  depends_on = [
+    "aws_vpc.main"]
 }

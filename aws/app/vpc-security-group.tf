@@ -22,8 +22,22 @@ resource "aws_security_group" "main" {
     from_port   = 27017
     to_port     = 27017
     protocol    = "-1"
-    cidr_blocks = ["${var.private_subnets}", "${var.public_subnets}"]
-    ipv6_cidr_blocks = ["${var.private_v6_subnets}", "${var.public_v6_subnets}"]
+    cidr_blocks = [
+      "${aws_subnet.main-private-az-1a.cidr_block}",
+      "${aws_subnet.main-private-az-1b.cidr_block}",
+      "${aws_subnet.main-private-az-1c.cidr_block}",
+      "${aws_subnet.main-public-az-1a.cidr_block}",
+      "${aws_subnet.main-public-az-1b.cidr_block}",
+      "${aws_subnet.main-public-az-1c.cidr_block}",
+    ]
+    ipv6_cidr_blocks = [
+      "${aws_subnet.main-private-az-1a.ipv6_cidr_block}",
+      "${aws_subnet.main-private-az-1b.ipv6_cidr_block}",
+      "${aws_subnet.main-private-az-1c.ipv6_cidr_block}",
+      "${aws_subnet.main-public-az-1a.ipv6_cidr_block}",
+      "${aws_subnet.main-public-az-1b.ipv6_cidr_block}",
+      "${aws_subnet.main-public-az-1c.ipv6_cidr_block}",
+    ]
   }
 
 

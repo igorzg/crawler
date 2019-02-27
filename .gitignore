@@ -8,3 +8,5 @@ target
 /RUNNING_PID
 /data
 /dist
+.terrafor*
+terrafor*

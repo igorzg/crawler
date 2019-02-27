@@ -1,7 +1,7 @@
 resource "aws_subnet" "main-public-az-1a" {
   vpc_id = "${aws_vpc.main.id}"
-  cidr_block = "${element(var.public_subnets, 0)}"
-  ipv6_cidr_block = "${element(var.public_v6_subnets, 0)}"
+  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 4, 0)}"
+  ipv6_cidr_block = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 0)}"
   availability_zone = "${element(var.azs, 0)}"
   assign_ipv6_address_on_creation = true
   tags = {
@@ -13,8 +13,8 @@ resource "aws_subnet" "main-public-az-1a" {
 
 resource "aws_subnet" "main-public-az-1b" {
   vpc_id = "${aws_vpc.main.id}"
-  cidr_block = "${element(var.public_subnets, 1)}"
-  ipv6_cidr_block = "${element(var.public_v6_subnets, 1)}"
+  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 4, 2)}"
+  ipv6_cidr_block = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 2)}"
   availability_zone = "${element(var.azs, 1)}"
   assign_ipv6_address_on_creation = true
   tags = {
@@ -27,8 +27,8 @@ resource "aws_subnet" "main-public-az-1b" {
 
 resource "aws_subnet" "main-public-az-1c" {
   vpc_id = "${aws_vpc.main.id}"
-  cidr_block = "${element(var.public_subnets, 2)}"
-  ipv6_cidr_block = "${element(var.public_v6_subnets, 2)}"
+  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 4, 4)}"
+  ipv6_cidr_block = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 4)}"
   availability_zone = "${element(var.azs, 2)}"
   assign_ipv6_address_on_creation = true
   tags = {
@@ -40,8 +40,8 @@ resource "aws_subnet" "main-public-az-1c" {
 
 resource "aws_subnet" "main-private-az-1a" {
   vpc_id = "${aws_vpc.main.id}"
-  cidr_block = "${element(var.private_subnets, 0)}"
-  ipv6_cidr_block = "${element(var.private_v6_subnets, 0)}"
+  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 4, 1)}"
+  ipv6_cidr_block = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 1)}"
   availability_zone = "${element(var.azs, 0)}"
   assign_ipv6_address_on_creation = true
   tags = {
@@ -53,8 +53,8 @@ resource "aws_subnet" "main-private-az-1a" {
 
 resource "aws_subnet" "main-private-az-1b" {
   vpc_id = "${aws_vpc.main.id}"
-  cidr_block = "${element(var.private_subnets, 1)}"
-  ipv6_cidr_block = "${element(var.private_v6_subnets, 1)}"
+  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 4, 3)}"
+  ipv6_cidr_block = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 3)}"
   availability_zone = "${element(var.azs, 1)}"
   assign_ipv6_address_on_creation = true
   tags = {
@@ -67,8 +67,8 @@ resource "aws_subnet" "main-private-az-1b" {
 
 resource "aws_subnet" "main-private-az-1c" {
   vpc_id = "${aws_vpc.main.id}"
-  cidr_block = "${element(var.private_subnets, 2)}"
-  ipv6_cidr_block = "${element(var.private_v6_subnets, 2)}"
+  cidr_block = "${cidrsubnet(aws_vpc.main.cidr_block, 4, 5)}"
+  ipv6_cidr_block = "${cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 5)}"
   availability_zone = "${element(var.azs, 2)}"
   assign_ipv6_address_on_creation = true
   tags = {

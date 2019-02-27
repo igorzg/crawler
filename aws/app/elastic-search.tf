@@ -43,7 +43,7 @@ resource "aws_elasticsearch_domain" "main" {
 CONFIG
 
   snapshot_options {
-    automated_snapshot_start_hour = 23
+    automated_snapshot_start_hour = 03
   }
 
   tags {
