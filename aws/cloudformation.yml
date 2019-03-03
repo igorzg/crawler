@@ -126,8 +126,8 @@ Resources:
                 Resource: '*'
               - Action:
                   - 'ecr:*'
-                  Effect: Allow
-                  Resource: !Ref EcrArn
+                Effect: Allow
+                Resource: !Ref EcrArn
               - Action:
                   - 'logs:*'
                 Effect: Allow
