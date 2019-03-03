@@ -4,20 +4,20 @@ phases:
   install:
     commands:
       - echo "$(lsb_release -cs)"
-      - apt-get update -y
-      - apt-get install -y apt-transport-https ca-certificates software-properties-common
-      - add-apt-repository -y ppa:openjdk-r/ppa
-      - sudo apt-get update -y
-      - apt-get install -y openjdk-8-jdk
+      - echo $PATH
+      - echo $JAVA_HOME
+      - mkdir -p /usr/java && wget https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz && tar xzvf openjdk-11.0.*_linux-x64_bin.tar.gz -C /usr/java && rm -vf openjdk-11.0.*_linux-x64_bin.tar.gz && /usr/java/jdk-11.0.1/bin/java -version 2>&1
+      - add-apt-repository ppa:deadsnakes/ppa
       - echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
       - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2EE0EA64E40A89B84B2DF73499E82A75642AC823
       - apt-get update -y
-      - apt-get install -y sbt
-      - apt-get install ca-certificates-java
-      - update-ca-certificates -f
-
+      - apt-get install -y sbt python3.6
+      - pip3 install awscli --upgrade --user
   build:
     commands:
-      - sbt docker:publishLocal
+      - PATH=/usr/java/jdk-11.0.1/bin:$PATH sbt docker:publishLocal
+  post_build:
+    commands:
+      - eval $(aws ecr get-login --region eu-west-1 | sed 's/ \-e none//')
       - docker tag $ECR_TAG $ECR_REPOSITORY:1.0
       - docker push $ECR_REPOSITORY

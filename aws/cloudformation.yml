@@ -22,6 +22,12 @@ Parameters:
     Type: String
     Default: 'main-stack'
 
+  CodeBuildLambdaArn:
+    Type: String
+
+  CodeBuildLambdaName:
+    Type: String
+
 Resources:
   MainBuild:
     Type: AWS::CodeBuild::Project
@@ -39,6 +45,8 @@ Resources:
             Value: !Ref EcrRepository
           - Name: ECR_TAG
             Value: !Ref EcrTag
+          - Name: CLOUD_FORMATION
+            Value: ""
       Source:
         Type: GITHUB
         Location: !Ref GithubLocation
@@ -47,6 +55,42 @@ Resources:
         VpcId: !Ref MainVpcId
         Subnets: !Split [',', !Ref MainSubnets]
         SecurityGroupIds: !Split [',', !Ref MainSecurityGroupIds]
+
+  MainBuildEvent:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Join ['-', [!Ref StackName, 'build', 'status']]
+      EventPattern:
+        source:
+          - 'aws.codebuild'
+        detail-type:
+          - 'Codebuild state change'
+        detail:
+          build-status:
+            - 'IN_PROGRESS'
+            - 'SUCCEEDED'
+            - 'FAILED'
+            - 'STOPPED'
+      State: 'ENABLED'
+      Targets:
+        - Arn: !Ref CodeBuildLambdaArn
+          Id: 'MainBuildLambdaTarget'
+
+  MainBuildToInvokeLambda:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !Ref CodeBuildLambdaName
+      Action: 'lambda:InvokeFunction'
+      Principal: 'events.amazonaws.com'
+      SourceArn: !GetAtt MainBuildEvent.Arn
+
+  LambdaStackInfo:
+    Type: AWS::CloudFormation::CustomResource
+    DependsOn:
+      - MainBuild
+    Properties:
+      ServiceToken: !Ref CodeBuildLambdaArn
+      StackName: !Ref StackName
 
   MainBuildRole:
     Type: AWS::IAM::Role
@@ -57,9 +101,9 @@ Resources:
             Effect: Allow
             Principal:
               Service: [
-              'lambda.amazonaws.com',
-              'codebuild.amazonaws.com',
-              !Join ['.', ['logs', !Ref 'AWS::Region', 'amazonaws.com']]
+                'lambda.amazonaws.com',
+                'codebuild.amazonaws.com',
+                !Join ['.', ['logs', !Ref 'AWS::Region', 'amazonaws.com']]
               ]
         Version: '2012-10-17'
       Path: /
@@ -73,6 +117,10 @@ Resources:
                   - 'ec2:CreateNetworkInterface'
                   - 'ec2:DeleteNetworkInterface'
                   - 'ec2:CreateNetworkInterfacePermission'
+                  - 'ecr:Get*'
+                  - 'ecr:List*'
+                  - 'ecr:Put*'
+                  - 'ecr:Set*'
                 Effect: Allow
                 Resource: '*'
               - Action:
