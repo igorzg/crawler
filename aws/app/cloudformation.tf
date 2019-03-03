@@ -9,6 +9,7 @@ resource "aws_cloudformation_stack" "main-stack" {
   timeout_in_minutes = 10
   parameters = {
     StackName = "${var.name}-stack"
+    EcrArn = "${aws_ecr_repository.main-build.arn}"
     EcrRepository = "${aws_ecr_repository.main-build.repository_url}"
     EcrTag = "${var.ecr-tag}"
     GithubLocation = "${var.ecr-github}"

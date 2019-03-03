@@ -1,5 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
+  EcrArn:
+    Type: String
+
   EcrRepository:
     Type: String
 
@@ -31,6 +34,8 @@ Parameters:
 Resources:
   MainBuild:
     Type: AWS::CodeBuild::Project
+    DependsOn:
+      - MainBuildEvent
     Properties:
       Name: !Ref StackName
       ServiceRole: !Ref MainBuildRole
@@ -117,12 +122,12 @@ Resources:
                   - 'ec2:CreateNetworkInterface'
                   - 'ec2:DeleteNetworkInterface'
                   - 'ec2:CreateNetworkInterfacePermission'
-                  - 'ecr:Get*'
-                  - 'ecr:List*'
-                  - 'ecr:Put*'
-                  - 'ecr:Set*'
                 Effect: Allow
                 Resource: '*'
+              - Action:
+                  - 'ecr:*'
+                  Effect: Allow
+                  Resource: !Ref EcrArn
               - Action:
                   - 'logs:*'
                 Effect: Allow

@@ -16,8 +16,6 @@ phases:
   build:
     commands:
       - PATH=/usr/java/jdk-11.0.1/bin:$PATH sbt docker:publishLocal
-  post_build:
-    commands:
       - eval $(aws ecr get-login --region eu-west-1 | sed 's/ \-e none//')
       - docker tag $ECR_TAG $ECR_REPOSITORY:1.0
       - docker push $ECR_REPOSITORY

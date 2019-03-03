@@ -19,7 +19,7 @@ exports.doStackFeedback = (event, status, data) => {
             PhysicalResourceId: event.PhysicalResourceId
         };
 
-        if (this.event.RequestType.toUpperCase() !== DELETE) {
+        if (event.RequestType.toUpperCase() !== DELETE) {
             if (status === "FAILED") {
                 body.Reason = data;
             } else {
@@ -39,14 +39,16 @@ exports.doStackFeedback = (event, status, data) => {
             method: "PUT",
             headers: {
                 "content-type": "",
-                "content-length": event.ResponseURL.length,
+                "content-length": sBody.length,
             }
         };
         const request = https.request(options, response => {
             let chunks = [];
             response.on("data", data => chunks.push(new Buffer(data, "ascii")));
             response.on("end", () => {
-               resolve(chunks.map(buffer => buffer.toString("utf8")).join(""));
+                const responseBody = chunks.map(buffer => buffer.toString("utf8")).join("");
+                console.log("RESPONSE", responseBody);
+                resolve(responseBody);
             });
         });
         request.on("error", err => reject(err));
