@@ -11,6 +11,19 @@
 1. [JDK gte 1.8](https://openjdk.java.net/install/)
 2. [Sbt gte 1.x.x](https://www.scala-sbt.org/) 
 3. [Docker](https://www.docker.com/products/overview)
+4. [Terraform](https://www.terraform.io)
+
+## AWS Deployment includes:
+* Vpc - Networking - (ipv4, ipv6, public & private subnets)
+* Private dns zone
+* Mongodb instance
+* Elastic search domain
+* Lambda cloud formation custom resource
+* AWS CodeBuild
+* AWS CloudWatch (Events, Logs)
+* AWS CloudFormation
+
+[More on AWS](aws/README.md)
 
 ## Running
 * Debugging mode:
