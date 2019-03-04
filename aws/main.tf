@@ -8,7 +8,7 @@ module "app" {
   private_zone = "zone.io"
   region = "${var.region}"
   es-domain = "crawler"
-  es-isntance-type = "m4.large.elasticsearch"
+  es-isntance-type = "t2.micro.elasticsearch"
   doc-cluster = "crawler"
   doc-instance-type = "db.r4.large"
   doc-instance-count = 1

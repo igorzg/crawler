@@ -6,7 +6,7 @@ resource "aws_cloudformation_stack" "main-stack" {
   name = "${var.name}-stack-lambda"
   template_body = "${file("cloudformation.yml")}"
   capabilities = ["CAPABILITY_IAM"]
-  timeout_in_minutes = 10
+  timeout_in_minutes = 30
   parameters = {
     StackName = "${var.name}-stack"
     EcrArn = "${aws_ecr_repository.main-build.arn}"

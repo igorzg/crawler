@@ -9,6 +9,7 @@ resource "aws_docdb_cluster" "main" {
   db_subnet_group_name = "${aws_docdb_subnet_group.main-private.name}"
   db_cluster_parameter_group_name = "${aws_docdb_cluster_parameter_group.main.name}"
   vpc_security_group_ids = ["${aws_security_group.main.id}"]
+  skip_final_snapshot = true
   depends_on = ["aws_vpc.main"]
 }
 

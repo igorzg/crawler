@@ -1,5 +1,6 @@
 const AWS = require("aws-sdk");
 const AWS_CODE_BUILD = new AWS.CodeBuild();
+const AWS_CLOUDWATCH_EVENT = new AWS.CloudWatchEvents({apiVersion: '2015-10-07'});
 const CFN = require("./cloudformation");
 
 const CREATE = "CREATE";
@@ -30,7 +31,16 @@ class AwsEventHandler {
      */
     resolve() {
         if (this.event.source === EVENT_CODE_BUILD) {
-            this.doCodeBuildFeedback();
+            this.doListRules().then(
+                data => {
+                    if (!data && data.length === 0) {
+                        this.callback(new Error("Missing rule event, cannot start codebuild!"));
+                    } else {
+                        this.doCodeBuildFeedback();
+                    }
+                },
+                err => this.callback(err)
+            );
         } else if (this.event.RequestType.toUpperCase() === CREATE) {
             this.doStartCodeBuild();
         } else if (this.event.RequestType.toUpperCase() === DELETE) {
@@ -72,12 +82,33 @@ class AwsEventHandler {
     }
 
     /**
+     * List all cloud watch event rules
+     */
+    doListRules() {
+        const eventName = this.event.ResourceProperties.StackEventName;
+        return new Promise((resolve, reject) => {
+            AWS_CLOUDWATCH_EVENT.listRules({
+                NamePrefix: eventName
+            }, function (err, data) {
+                if (err) {
+                    console.error("List rules error", err);
+                    reject(err);
+                } else {
+                    console.log("List rules", data);
+                    resolve(data);
+                }
+            });
+        });
+    }
+
+    /**
      * Start code build job
-     * @returns {Request<CodeBuild.StartBuildOutput, AWSError>}
      */
     doStartCodeBuild() {
+        const stackName = this.event.ResourceProperties.StackName;
+
         AWS_CODE_BUILD.startBuild({
-            projectName: this.event.ResourceProperties.StackName,
+            projectName: stackName,
             environmentVariablesOverride: [
                 {
                     name: EVENT_CFN,

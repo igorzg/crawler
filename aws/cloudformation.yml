@@ -76,6 +76,8 @@ Resources:
             - 'SUCCEEDED'
             - 'FAILED'
             - 'STOPPED'
+        project-name:
+          - !Ref StackName
       State: 'ENABLED'
       Targets:
         - Arn: !Ref CodeBuildLambdaArn
@@ -92,10 +94,11 @@ Resources:
   LambdaStackInfo:
     Type: AWS::CloudFormation::CustomResource
     DependsOn:
-      - MainBuild
+      - MainBuildEvent
     Properties:
       ServiceToken: !Ref CodeBuildLambdaArn
       StackName: !Ref StackName
+      StackEventName: !GetAtt MainBuildEvent.Name
 
   MainBuildRole:
     Type: AWS::IAM::Role
@@ -108,6 +111,7 @@ Resources:
               Service: [
                 'lambda.amazonaws.com',
                 'codebuild.amazonaws.com',
+                'events.amazonaws.com',
                 !Join ['.', ['logs', !Ref 'AWS::Region', 'amazonaws.com']]
               ]
         Version: '2012-10-17'
@@ -125,7 +129,22 @@ Resources:
                 Effect: Allow
                 Resource: '*'
               - Action:
-                  - 'ecr:*'
+                  - 'ecr:GetAuthorizationToken'
+                  - 'events:List*'
+                Effect: Allow
+                Resource: '*'
+              - Action:
+                  - 'ecr:BatchCheckLayerAvailability'
+                  - 'ecr:GetDownloadUrlForLayer'
+                  - 'ecr:GetRepositoryPolicy'
+                  - 'ecr:DescribeRepositories'
+                  - 'ecr:ListImages'
+                  - 'ecr:DescribeImages'
+                  - 'ecr:BatchGetImage'
+                  - 'ecr:InitiateLayerUpload'
+                  - 'ecr:UploadLayerPart'
+                  - 'ecr:CompleteLayerUpload'
+                  - 'ecr:PutImage'
                 Effect: Allow
                 Resource: !Ref EcrArn
               - Action:
