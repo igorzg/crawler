@@ -23,7 +23,7 @@
 * AWS CloudWatch (Events, Logs)
 * AWS CloudFormation
 
-[More on AWS](aws/README.md)
+[More on AWS](aws)
 
 ## Running
 * Debugging mode:
